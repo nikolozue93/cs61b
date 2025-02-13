@@ -14,32 +14,52 @@ public class SLList {
         }
     }
 
-    private IntNode first;
+    /* The first item if it exists is at sentinel.next */
+    private IntNode sentinel;
     private int size;
 
+    private IntNode first;
+
+    /** creating empty SLList */
     public SLList(){
         //first = new IntNode(x, null);
-        first = null;
+        //first = null;
+
+        sentinel = new IntNode(11, null); // what number we put in here doesnt really matter, as we are never retrieving that info, it doesnt change anything for us
+                                                 // it is just holding data, we can put any number there
         size = 0;
     }
 
+    /** 1 item SLList */
+    public SLList(int x){
+        sentinel = new IntNode(11, null);
+        sentinel.next = new IntNode(x, null);
+
+//        first = new IntNode(x, null);
+//        size = 1;
+    }
+
     public void addFirst(int x){
-        first = new IntNode(x, first);
+        sentinel.next = new IntNode(x, sentinel.next);
+        //first = new IntNode(x, first);
         size++;
     }
 
     public int getFirst(){
-        return first.item;
+        return sentinel.next.item;
+        //return first.item;
     }
 
     public void addLast(int x){
         size++;
 
-        if(first == null){
-            addFirst(x);
-        }
+//        if(first == null){
+//            first = new IntNode(x, null);
+//        }
 
-        IntNode p = first;
+//        IntNode p = first;
+
+        IntNode p = sentinel;
         while(p.next != null){
             p = p.next;
         }
