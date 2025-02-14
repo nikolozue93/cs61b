@@ -11,9 +11,13 @@ import java.util.Formatter;
  *  @author P. N. Hilfinger + Josh Hug
  */
 public class Model {
-    /** Current contents of the board. */
+    /**
+     * Current contents of the board.
+     */
     private final Board board;
-    /** Current score. */
+    /**
+     * Current score.
+     */
     private int score;
 
     /* Coordinate System: column x, row y of the board (where x = 0,
@@ -21,77 +25,98 @@ public class Model {
      * to board.tile(x, y).  Be careful!
      */
 
-    /** Largest piece value. */
+    /**
+     * Largest piece value.
+     */
     public static final int MAX_PIECE = 2048;
 
-    /** A new 2048 game on a board of size SIZE with no pieces
-     *  and score 0. */
+    /**
+     * A new 2048 game on a board of size SIZE with no pieces
+     * and score 0.
+     */
     public Model(int size) {
         board = new Board(size);
         score = 0;
     }
 
-    /** A new 2048 game where RAWVALUES contain the values of the tiles
+    /**
+     * A new 2048 game where RAWVALUES contain the values of the tiles
      * (0 if null). VALUES is indexed by (x, y) with (0, 0) corresponding
-     * to the bottom-left corner. Used for testing purposes. */
+     * to the bottom-left corner. Used for testing purposes.
+     */
     public Model(int[][] rawValues, int score) {
         board = new Board(rawValues);
         this.score = score;
     }
 
-    /** Return the current Tile at (x, y), where 0 <= x < size(),
-     *  0 <= y < size(). Returns null if there is no tile there.
-     *  Used for testing. */
+    /**
+     * Return the current Tile at (x, y), where 0 <= x < size(),
+     * 0 <= y < size(). Returns null if there is no tile there.
+     * Used for testing.
+     */
     public Tile tile(int x, int y) {
         return board.tile(x, y);
     }
 
-    /** Return the number of squares on one side of the board. */
+    /**
+     * Return the number of squares on one side of the board.
+     */
     public int size() {
         return board.size();
     }
 
-    /** Return the current score. */
+    /**
+     * Return the current score.
+     */
     public int score() {
         return score;
     }
 
 
-    /** Clear the board to empty and reset the score. */
+    /**
+     * Clear the board to empty and reset the score.
+     */
     public void clear() {
         score = 0;
         board.clear();
     }
 
 
-    /** Add TILE to the board. There must be no Tile currently at the
-     *  same position. */
+    /**
+     * Add TILE to the board. There must be no Tile currently at the
+     * same position.
+     */
     public void addTile(Tile tile) {
         board.addTile(tile);
     }
 
-    /** Return true iff the game is over (there are no moves, or
-     *  there is a tile with value 2048 on the board). */
+    /**
+     * Return true iff the game is over (there are no moves, or
+     * there is a tile with value 2048 on the board).
+     */
     public boolean gameOver() {
         return maxTileExists() || !atLeastOneMoveExists();
     }
 
-    /** Returns this Model's board. */
+    /**
+     * Returns this Model's board.
+     */
     public Board getBoard() {
         return board;
     }
 
-    /** Returns true if at least one space on the board is empty.
-     *  Empty spaces are stored as null.
-     * */
+    /**
+     * Returns true if at least one space on the board is empty.
+     * Empty spaces are stored as null.
+     */
     public boolean emptySpaceExists() {
         // TODO: Task 1. Fill in this function.
         int size = board.size();
 
-        for(int i = 0; i < size; i++){
-            for(int j = 0; j < size; j++){
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
                 //Tile t = board.tile(i, j);
-                if(board.tile(i, j) == null){
+                if (board.tile(i, j) == null) {
                     return true;
                 }
             }
@@ -108,12 +133,12 @@ public class Model {
         // TODO: Task 2. Fill in this function.
         int size = board.size();
 
-        for(int i = 0; i < size; i++){
-            for(int j = 0; j < size; j++){
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
                 Tile t = board.tile(i, j);
 
-                if(t != null){
-                    if(t.value() == MAX_PIECE){
+                if (t != null) {
+                    if (t.value() == MAX_PIECE) {
                         return true;
                     }
                 }
@@ -130,6 +155,55 @@ public class Model {
      */
     public boolean atLeastOneMoveExists() {
         // TODO: Task 3. Fill in this function.
+        if (this.emptySpaceExists()) {
+            return true;
+        }
+
+        int size = board.size();
+        for (int x = 0; x < size; x++) {
+            for (int y = 0; y < size; y++) {
+                Tile curr = board.tile(x, y);
+                Tile up, down, right, left;
+                up = down = right = left = null;
+
+                if (x + 1 < size) {
+                    right = board.tile(x + 1, y);
+                }
+                if (x - 1 >= 0) {
+                    left = board.tile(x - 1, y);
+                }
+                if (y + 1 < size) {
+                    up = board.tile(x, y + 1);
+                }
+                if (y - 1 >= 0) {
+                    down = board.tile(x, y - 1);
+                }
+
+                if (curr != null) {
+                    int currVal = curr.value();
+                    if (up != null) {
+                        if (currVal == up.value()) {
+                            return true;
+                        }
+                    }
+                    if (down != null) {
+                        if (currVal == down.value()) {
+                            return true;
+                        }
+                    }
+                    if (right != null) {
+                        if (currVal == right.value()) {
+                            return true;
+                        }
+                    }
+                    if (left != null) {
+                        if (currVal == left.value()) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
         return false;
     }
 
