@@ -288,6 +288,9 @@ public class Model {
 
     public void tilt(Side side) {
         // TODO: Tasks 8 and 9. Fill in this function.
+        for(int x = 0; x < board.size(); x++){
+            this.tiltColumn(x);
+        }
     }
 
     /** Tilts every column of the board toward SIDE.
