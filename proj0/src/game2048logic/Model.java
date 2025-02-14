@@ -110,7 +110,6 @@ public class Model {
      * Empty spaces are stored as null.
      */
     public boolean emptySpaceExists() {
-        // TODO: Task 1. Fill in this function.
         int size = board.size();
 
         for (int i = 0; i < size; i++) {
@@ -130,7 +129,6 @@ public class Model {
      * given a Tile object t, we get its value with t.value().
      */
     public boolean maxTileExists() {
-        // TODO: Task 2. Fill in this function.
         int size = board.size();
 
         for (int i = 0; i < size; i++) {
@@ -154,7 +152,6 @@ public class Model {
      * 2. There are two adjacent tiles with the same value.
      */
     public boolean atLeastOneMoveExists() {
-        // TODO: Task 3. Fill in this function.
         if (this.emptySpaceExists()) {
             return true;
         }
@@ -226,7 +223,6 @@ public class Model {
         int myValue = currTile.value();
         int targetY = y;
 
-        // TODO: Tasks 5, 6, and 10. Fill in this function.
         int size = board.size();
         /* counting how many tiles up we can move
            if tile up is null, or has the same value as our currTile
@@ -236,7 +232,7 @@ public class Model {
 
         // start from above the current tile
         // if we had vertical = y, first comparison would be to itself
-        for(int vertical = y + 1; vertical < size; vertical++){
+        for (int vertical = y + 1; vertical < size; vertical++) {
             Tile up = board.tile(x, vertical);
 
             /*
@@ -249,9 +245,9 @@ public class Model {
             if neither of these cases have been executed, then it means that the
             currTile and upper one are different, so we cant move, so we just break
              */
-            if(up == null){
+            if (up == null) {
                 tileCtr++;
-            } else if(myValue == up.value() && !up.wasMerged()){
+            } else if (myValue == up.value() && !up.wasMerged()) {
                 tileCtr++;
                 this.score += (2 * myValue);
                 break;
@@ -270,8 +266,6 @@ public class Model {
      * so we are tilting the tiles in this column up.
      * */
     public void tiltColumn(int x) {
-        // TODO: Task 7. Fill in this function.
-
         /*
         we start from the above of each column and go down from there
         we create a tile with each coordinate, to check if they are null
@@ -279,18 +273,18 @@ public class Model {
         if they are not null, then we do as needed
          */
         int y = this.board.size() - 1;
-        for(; y >= 0; y--){
+        for (; y >= 0; y--) {
             Tile t = board.tile(x, y);
-            if(t != null){
+            if (t != null) {
                 this.moveTileUpAsFarAsPossible(x, y);
             }
         }
     }
 
     public void tilt(Side side) {
-        // TODO: Tasks 8 and 9. Fill in this function.
+        // putting corresponding perspective(side parameter) and THEN tilting
         board.setViewingPerspective(side);
-        for(int x = 0; x < board.size(); x++){
+        for (int x = 0; x < board.size(); x++) {
             this.tiltColumn(x);
         }
         board.setViewingPerspective(Side.NORTH);
