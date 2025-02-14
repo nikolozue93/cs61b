@@ -227,6 +227,27 @@ public class Model {
         int targetY = y;
 
         // TODO: Tasks 5, 6, and 10. Fill in this function.
+        int size = board.size();
+        /* counting how many tiles up we can move
+           if tile up is null, or has the same value as our currTile
+           counter increases
+         */
+        int tileCtr = 0;
+        // start from above the current tile
+        // if we had vertical = y, first comparison would be to itself
+        for(int vertical = y + 1; vertical < size; vertical++){
+            Tile up = board.tile(x, vertical);
+
+            if(up == null){
+                tileCtr++;
+                //continue;
+            } else if(myValue == up.value()){
+                tileCtr++;
+            }
+        }
+        // so from the current y to the targetY, would be (current)Y + tileCtr
+        targetY += tileCtr;
+        board.move(x, targetY, currTile);
     }
 
     /** Handles the movements of the tilt in column x of board B
