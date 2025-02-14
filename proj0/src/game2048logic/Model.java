@@ -253,6 +253,7 @@ public class Model {
                 tileCtr++;
             } else if(myValue == up.value() && !up.wasMerged()){
                 tileCtr++;
+                this.score += (2 * myValue);
                 break;
             } else {
                 break;
@@ -288,6 +289,9 @@ public class Model {
 
     public void tilt(Side side) {
         // TODO: Tasks 8 and 9. Fill in this function.
+        for(int i = 0; i < 4; i++){
+
+        }
         for(int x = 0; x < board.size(); x++){
             this.tiltColumn(x);
         }
