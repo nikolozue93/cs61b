@@ -233,16 +233,29 @@ public class Model {
            counter increases
          */
         int tileCtr = 0;
+
         // start from above the current tile
         // if we had vertical = y, first comparison would be to itself
         for(int vertical = y + 1; vertical < size; vertical++){
             Tile up = board.tile(x, vertical);
 
+            /*
+            So, when upper tile is null, we can freely move upward from currTile
+
+            but when current value is the same as upper one, AND that tile wasnt merged,
+            then we can increase tileCtr and just break the for loop, as this tile movement
+            ends here
+
+            if neither of these cases have been executed, then it means that the
+            currTile and upper one are different, so we cant move, so we just break
+             */
             if(up == null){
                 tileCtr++;
-                //continue;
-            } else if(myValue == up.value()){
+            } else if(myValue == up.value() && !up.wasMerged()){
                 tileCtr++;
+                break;
+            } else {
+                break;
             }
         }
         // so from the current y to the targetY, would be (current)Y + tileCtr
