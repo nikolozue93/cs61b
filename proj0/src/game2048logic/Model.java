@@ -270,6 +270,20 @@ public class Model {
      * */
     public void tiltColumn(int x) {
         // TODO: Task 7. Fill in this function.
+
+        /*
+        we start from the above of each column and go down from there
+        we create a tile with each coordinate, to check if they are null
+        if they are null, we cant invoke .value() method on them from helper method
+        if they are not null, then we do as needed
+         */
+        int y = this.board.size() - 1;
+        for(; y >= 0; y--){
+            Tile t = board.tile(x, y);
+            if(t != null){
+                this.moveTileUpAsFarAsPossible(x, y);
+            }
+        }
     }
 
     public void tilt(Side side) {
