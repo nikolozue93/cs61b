@@ -11,7 +11,6 @@ public class MapExercises {
         char letter = 'a';
         int asciiVal = (int) letter;
         int num = 1;
-
         Map<Character, Integer> letterToNum = new HashMap<>();
         while(num <= 26){
             letterToNum.put(letter, num);
@@ -45,6 +44,8 @@ public class MapExercises {
         int count = 0;
 
         for(String s : words){
+            // OR
+            // map.put(word, map.getOrDefault(word, 0) +1);
             count = 0;
             for(String w : words){
                 if(s.equals(w)){
