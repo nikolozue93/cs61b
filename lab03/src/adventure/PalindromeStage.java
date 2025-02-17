@@ -64,7 +64,7 @@ public class PalindromeStage implements AdventureStage {
     /** Returns a new IntList with the contents of the original IntList in reverse order.*/
     private static IntList reverseList(IntList l) {
         IntList reversed = null;
-        while (l.rest != null) {
+        while (l != null) {
             reversed = new IntList(l.first, reversed);
             l = l.rest;
         }
@@ -76,9 +76,10 @@ public class PalindromeStage implements AdventureStage {
      * For example, the string "606" is converted to 6 -> 0 -> 6.
      */
     private static IntList digitsToIntList(String s) {
+        //int len = s.length();
         int[] a = new int[s.length()];
-        for (int i = s.length(); i > 0; i++) {
-            a[s.length() - i] = Character.getNumericValue(s.charAt(i));
+        for (int i = s.length(); i > 0; i--) {
+            a[s.length() - i] = Character.getNumericValue(s.charAt(i - 1));
         }
         return IntList.of(a);
     }
