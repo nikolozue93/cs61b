@@ -1,6 +1,7 @@
 package deque;
 
 import java.util.List;
+import java.util.ArrayList;
 
 public class LinkedListDeque61B<T> implements Deque61B<T> {
     private Node sentinel;
@@ -67,7 +68,23 @@ public class LinkedListDeque61B<T> implements Deque61B<T> {
 
     @Override
     public List<T> toList() {
-        return List.of();
+        List<T> list = new ArrayList<>();
+        Node p = this.sentinel.next;
+
+        // we can use size? don't think so
+        while(p != sentinel){
+            list.add(p.item);
+            p = p.next;
+        }
+
+//        int len = this.size;
+//        while(len > 0){
+//            list.add(p.item);
+//            len--;
+//            p = p.next;
+//        }
+
+        return list;
     }
 
     @Override
