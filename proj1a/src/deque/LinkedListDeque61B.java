@@ -28,9 +28,10 @@ public class LinkedListDeque61B<T> implements Deque61B<T> {
 
     @Override
     public void addFirst(T x) {
-        Node firstNode = new Node(sentinel, x, sentinel.next);
-        sentinel.next.prev = firstNode;
-        sentinel.next = firstNode;
+        Node first = new Node(sentinel, x, sentinel);
+        sentinel.next.prev = first;
+        first.next = sentinel.next; // we can directly do this, in first node creation, in next parameter place
+        sentinel.next = first;
         size += 1;
 //        size += 1;
 //        if(sentinel.next == sentinel){
@@ -63,6 +64,7 @@ public class LinkedListDeque61B<T> implements Deque61B<T> {
         sentinel.prev = newLast;
 
         secondToLast.next = newLast;
+        size += 1;
         //Node lastPrev = sentinel.prev.next;
     }
 
@@ -89,12 +91,12 @@ public class LinkedListDeque61B<T> implements Deque61B<T> {
 
     @Override
     public boolean isEmpty() {
-        return false;
+        return size <= 0;
     }
 
     @Override
     public int size() {
-        return 0;
+        return size;
     }
 
     @Override
