@@ -109,13 +109,55 @@ public class LinkedListDeque61B<T> implements Deque61B<T> {
         return null;
     }
 
+    /** With sentinel = sentinel.next, we are making sure we are dealing with the real node
+     * Then with that, we go through the list like a carousel, index amount of times
+     * Whenever index will be zero, sentinel would be pointing at the node we are looking for.
+     * For better understanding look into corresponding test and visualizer
+     *
+     * Inside the last call, when index == 0, we are saving the value we want to return,
+     * and making the list return to its original order. So, to think about this, recursive call
+     * will go through the list unti
+     *
+     *
+     *
+     * I think when we check if index == 0, after we should alter inside if sentinel = sentinel.next and value getters
+     *
+     * otherwise we should do this after those ifs
+     * */
     @Override
     public T get(int index) {
-        return null;
+
+        if(index == -1 || index >= size){
+            return null;
+        }
+
+        Node sent = sentinel;
+        for(int i = 0; i <= index; i++){
+            sent = sent.next;
+        }
+
+        return sent.item;
     }
 
     @Override
     public T getRecursive(int index) {
-        return null;
+        //sentinel = sentinel.next;
+        if(index == 0){
+            //T item = sentinel.item;
+            //sentinel = sentinel.next;
+            return sentinel.next.item;
+        }
+        if(index < 0 || index > size){
+            return null;
+        }
+
+//        Node sent = sentinel;
+//        if(index != 0){
+//            sent = sentinel.next;
+//            sentinel.next.get(index - 1);
+//        }
+        sentinel = sentinel.next;
+        return this.get(index - 1);
+        //return null;
     }
 }
