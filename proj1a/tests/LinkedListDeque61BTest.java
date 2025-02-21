@@ -91,4 +91,31 @@ public class LinkedListDeque61BTest {
         Deque61B<Integer> lld1 = new LinkedListDeque61B<>();
         assertThat(lld1.isEmpty()).isTrue();
     }
+
+    @Test
+    public void testGet(){
+        Deque61B<String> lld0 = new LinkedListDeque61B<>();
+        //assertWithMessage("Index out of bounds").that(lld0.get(228) == null);
+        lld0.addLast("Last");
+        lld0.addFirst("First");
+        lld0.addFirst("Firsttt");
+        lld0.addFirst("Firsttt");
+        lld0.addFirst("heh");
+        lld0.addFirst("das");
+        lld0.addFirst("dsadw");
+        String s = lld0.get(6);
+
+        assertThat(s.equals("Last")).isTrue();
+        s = lld0.get(0);
+        assertThat(s.equals("dsadw")).isTrue();
+
+        s = lld0.get(2);
+        assertThat(s.equals("heh")).isTrue();
+        s = lld0.get(5);
+        assertThat(s.equals("First")).isTrue();
+
+        // verifying null return
+        s = lld0.get(-1);
+        s = lld0.get(2421);
+    }
 }
