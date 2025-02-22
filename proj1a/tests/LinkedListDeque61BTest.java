@@ -146,4 +146,30 @@ public class LinkedListDeque61BTest {
         s = lld0.getRecursive(2421);
     }
 
+    @Test
+    public void testRemoveFirst(){
+        Deque61B<String> lld1 = new LinkedListDeque61B<>();
+
+        lld1.addFirst("back");
+        lld1.addFirst("middle");
+        lld1.addFirst("front");
+        lld1.addLast("Last");
+        lld1.removeFirst();
+        assertThat(lld1.toList()).containsExactly( "middle", "back", "Last").inOrder();
+        assertThat(lld1.size() == 3).isTrue();
+
+        lld1.removeFirst();
+        assertThat(lld1.toList()).containsExactly(  "back", "Last").inOrder();
+
+        lld1.removeFirst();
+        assertThat(lld1.toList()).containsExactly(  "Last").inOrder();
+
+        lld1.removeFirst();
+        assertThat(lld1.toList().isEmpty()).isTrue();
+
+        lld1.removeFirst();
+
+        assertThat(lld1.size() == 0).isTrue();
+    }
+
 }
