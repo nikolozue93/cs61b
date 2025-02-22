@@ -118,4 +118,32 @@ public class LinkedListDeque61BTest {
         s = lld0.get(-1);
         s = lld0.get(2421);
     }
+
+    @Test
+    public void testGetRecursive(){
+        Deque61B<String> lld0 = new LinkedListDeque61B<>();
+        //assertWithMessage("Index out of bounds").that(lld0.get(228) == null);
+        lld0.addLast("Last");
+        lld0.addFirst("First");
+        lld0.addFirst("Firsttt");
+        lld0.addFirst("Firsttt");
+        lld0.addFirst("heh");
+        lld0.addFirst("das");
+        lld0.addFirst("dsadw");
+        String s = lld0.getRecursive(6);
+
+        assertThat(s.equals("Last")).isTrue();
+        s = lld0.getRecursive(0);
+        assertThat(s.equals("dsadw")).isTrue();
+
+        s = lld0.getRecursive(2);
+        assertThat(s.equals("heh")).isTrue();
+        s = lld0.getRecursive(5);
+        assertThat(s.equals("First")).isTrue();
+
+        // verifying null return
+        s = lld0.getRecursive(-1);
+        s = lld0.getRecursive(2421);
+    }
+
 }
