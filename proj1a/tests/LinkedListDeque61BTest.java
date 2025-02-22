@@ -172,4 +172,29 @@ public class LinkedListDeque61BTest {
         assertThat(lld1.size() == 0).isTrue();
     }
 
+    @Test
+    public void testRemoveLast(){
+        Deque61B<String> lld1 = new LinkedListDeque61B<>();
+
+        lld1.addFirst("back");
+        lld1.addFirst("middle");
+        lld1.addFirst("front");
+        lld1.addLast("Last");
+        lld1.removeLast();
+        assertThat(lld1.toList()).containsExactly( "front", "middle", "back").inOrder();
+        assertThat(lld1.size() == 3).isTrue();
+
+        lld1.removeLast();
+        assertThat(lld1.toList()).containsExactly(  "front", "middle").inOrder();
+
+        lld1.removeLast();
+        assertThat(lld1.toList()).containsExactly(  "front").inOrder();
+
+        lld1.removeLast();
+        assertThat(lld1.toList().isEmpty()).isTrue();
+
+        lld1.removeLast();
+
+        assertThat(lld1.size() == 0).isTrue();
+    }
 }
