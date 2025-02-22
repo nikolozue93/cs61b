@@ -44,6 +44,7 @@ public class GuitarString {
         for(int i = 0; i < buffer.size(); i++){
             r = Math.random() - 0.5;
             buffer.addFirst(r);
+            buffer.removeLast();
         }
     }
 
@@ -54,12 +55,24 @@ public class GuitarString {
         // TODO: Dequeue the front sample and enqueue a new sample that is
         //       the average of the two multiplied by the DECAY factor.
         //       **Do not call StdAudio.play().**
+        double newDouble, avg, first, second;
+        int size = buffer.size();
+        for(int i = 0; i < size - 1; i++){
+            first = buffer.get(i);
+            second = buffer.get(i + 1);
+
+            avg = (first + second) / 2;
+            newDouble = avg * DECAY;
+
+            buffer.removeFirst();
+            buffer.addLast(newDouble);
+        }
     }
 
     /* Return the double at the front of the buffer. */
     public double sample() {
         // TODO: Return the correct thing.
-        return 0;
+        return buffer.get(0);
     }
 }
     // TODO: Remove all comments that say TODO when you're done.
