@@ -141,23 +141,16 @@ public class LinkedListDeque61B<T> implements Deque61B<T> {
 
     @Override
     public T getRecursive(int index) {
-        //sentinel = sentinel.next;
-        if(index == 0){
-            //T item = sentinel.item;
-            //sentinel = sentinel.next;
-            return sentinel.next.item;
-        }
-        if(index < 0 || index > size){
+        if(isEmpty() || index > size){
             return null;
         }
+        return getRecursiveHelper(sentinel.next, index).item;
+    }
 
-//        Node sent = sentinel;
-//        if(index != 0){
-//            sent = sentinel.next;
-//            sentinel.next.get(index - 1);
-//        }
-        sentinel = sentinel.next;
-        return this.get(index - 1);
-        //return null;
+    public Node getRecursiveHelper(Node node, int index){
+        if(index == 0){
+            return node;
+        }
+        return getRecursiveHelper(node.next, index - 1);
     }
 }
