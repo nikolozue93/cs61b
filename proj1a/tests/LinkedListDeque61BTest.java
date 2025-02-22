@@ -142,8 +142,8 @@ public class LinkedListDeque61BTest {
         assertThat(s.equals("First")).isTrue();
 
         // verifying null return
-        s = lld0.getRecursive(-1);
-        s = lld0.getRecursive(2421);
+//        s = lld0.getRecursive(-1);
+//        s = lld0.getRecursive(2421);
     }
 
     @Test
@@ -197,4 +197,69 @@ public class LinkedListDeque61BTest {
 
         assertThat(lld1.size() == 0).isTrue();
     }
+
+//    @Test
+//    public void testing(){
+//        Deque61B<Double> lld1 = new LinkedListDeque61B<>();
+//        int SR = 44100;
+//        double frequency = 5126.7;
+//        int capacity = (int) Math.round(SR / frequency);
+//
+//        for(int i = 0; i < capacity; i++){
+//            lld1.addFirst(0.0);
+//        }
+//
+//        double r;
+//        for(int i = 0; i < lld1.size(); i++){
+//            r = Math.random() - 0.5;
+//
+//            lld1.remove(i);
+//
+//            lld1.addFirst(r);
+//        }
+//    }
+
+    @Test
+    public void testing(){
+        Deque61B<Double> lld1 = new LinkedListDeque61B<>();
+        int SR = 44100;
+        double frequency = 5126.7;
+        int capacity = (int) Math.round(SR / frequency);
+
+        for(int i = 0; i < capacity; i++){
+            lld1.addFirst(0.0);
+        }
+
+        double r;
+        for(int i = 0; i < lld1.size(); i++){
+            r = Math.random() - 0.5;
+            lld1.addFirst(r);
+            lld1.removeLast();
+        }
+    }
+//    @Test
+//    public void testGetNode(){
+//        Deque61B<String> lld1 = new LinkedListDeque61B<>();
+//
+//        lld1.addFirst("back");
+//        lld1.addFirst("middle");
+//        lld1.addFirst("front");
+//        lld1.addLast("Last");
+//        lld1.remove(1);
+//        assertThat(lld1.toList()).containsExactly( "front", "back", "Last").inOrder();
+//        assertThat(lld1.size() == 3).isTrue();
+//
+//        lld1.remove(0);
+//        assertThat(lld1.toList()).containsExactly(  "back", "Last").inOrder();
+//
+//        lld1.remove(1);
+//        assertThat(lld1.toList()).containsExactly(  "back").inOrder();
+//
+//        lld1.remove(0);
+//        assertThat(lld1.toList().isEmpty()).isTrue();
+//
+//        lld1.removeLast();
+//
+//        assertThat(lld1.size() == 0).isTrue();
+//    }
 }

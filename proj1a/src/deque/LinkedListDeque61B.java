@@ -33,28 +33,10 @@ public class LinkedListDeque61B<T> implements Deque61B<T> {
         first.next = sentinel.next; // we can directly do this, in first node creation, in next parameter place
         sentinel.next = first;
         size += 1;
-//        size += 1;
-//        if(sentinel.next == sentinel){
-//            //sentinel.next.item = x;
-//            Node sentNext = sentinel.next;
-//            sentinel.next = new Node(sentinel, x, sentinel);
-//            //sentNext.prev ------------------------^^^^
-//        } else {
-//            Node first = sentinel.next;
-//            Node second = first.prev;
-//            sentinel.next = new Node(sentinel, x, second);
-////            Node sentNext = sentinel.next;
-////            Node sentPrev = sentNext.prev;
-////            sentinel.next = new Node(sentinel, x, sentNext.next);
-        }
-
-
-        //sentPrev = sentNext;
-//    }
+    }
 
     @Override
     public void addLast(T x) {
-        // this DIDN'T WORK!! Node secondToLast = new Node(sentinel.prev, sentinel.prev.item, sentinel.next);
         Node secondToLast = sentinel.prev;
         Node newLast = new Node(secondToLast, x, sentinel);
         // as sentinel.prev is always pointing at the last element
@@ -65,7 +47,6 @@ public class LinkedListDeque61B<T> implements Deque61B<T> {
 
         secondToLast.next = newLast;
         size += 1;
-        //Node lastPrev = sentinel.prev.next;
     }
 
     @Override
@@ -73,19 +54,11 @@ public class LinkedListDeque61B<T> implements Deque61B<T> {
         List<T> list = new ArrayList<>();
         Node p = this.sentinel.next;
 
-        // we can use size? don't think so
+        // we can use size? don't think so (Didn't work)
         while(p != sentinel){
             list.add(p.item);
             p = p.next;
         }
-
-//        int len = this.size;
-//        while(len > 0){
-//            list.add(p.item);
-//            len--;
-//            p = p.next;
-//        }
-
         return list;
     }
 
@@ -127,21 +100,6 @@ public class LinkedListDeque61B<T> implements Deque61B<T> {
         return item;
     }
 
-    /** With sentinel = sentinel.next, we are making sure we are dealing with the real node
-     * Then with that, we go through the list like a carousel, index amount of times
-     * Whenever index will be zero, sentinel would be pointing at the node we are looking for.
-     * For better understanding look into corresponding test and visualizer
-     *
-     * Inside the last call, when index == 0, we are saving the value we want to return,
-     * and making the list return to its original order. So, to think about this, recursive call
-     * will go through the list unti
-     *
-     *
-     *
-     * I think when we check if index == 0, after we should alter inside if sentinel = sentinel.next and value getters
-     *
-     * otherwise we should do this after those ifs
-     * */
     @Override
     public T get(int index) {
 
@@ -157,6 +115,8 @@ public class LinkedListDeque61B<T> implements Deque61B<T> {
         return sent.item;
     }
 
+    // if the first statement is not true, we are sending the first real node
+    // to the helper function
     @Override
     public T getRecursive(int index) {
         if(isEmpty() || index > size){
@@ -165,10 +125,48 @@ public class LinkedListDeque61B<T> implements Deque61B<T> {
         return getRecursiveHelper(sentinel.next, index).item;
     }
 
+    /** We need helper function to create a copy node, which wont affect
+     * the original list. Point us to the node we are seeking for
+     * and then return
+     */
     public Node getRecursiveHelper(Node node, int index){
         if(index == 0){
             return node;
         }
         return getRecursiveHelper(node.next, index - 1);
     }
+
+
+    /** These last two methods are my experiments, they are both working correctly
+     * we are removing any node we want, with just index.
+     */
+
+//    public Node getNode(int index){
+//        if(this.isEmpty() || index > this.size() || index < 0){
+//            return null;
+//        }
+//
+//        Node curr = sentinel.next;
+//        while(index > 0){
+//            curr = curr.next;
+//            index--;
+//        }
+//
+//        return curr;
+//    }
+//
+//    @Override
+//    public T remove(int index){
+//        if(this.isEmpty() || index > this.size() || index < 0){
+//            return null;
+//        }
+//
+//        Node curr = this.getNode(index); // lets imagine this returns Node with get()
+//        T item = curr.item;
+//
+//        curr.prev.next = curr.next;
+//        curr.next.prev = curr.prev;
+//        size -= 1;
+//        return item;
+//    }
 }

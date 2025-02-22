@@ -56,6 +56,7 @@ public interface Deque61B<T> {
      */
     T removeLast();
 
+//    T remove(int index);
     /**
      * The Deque61B abstract data type does not typically have a get method,
      * but we've included this extra operation to provide you with some
