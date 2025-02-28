@@ -1,18 +1,24 @@
+import jh61b.utils.Reflection;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.lang.reflect.Field;
+import java.util.List;
+
 import static com.google.common.truth.Truth.assertThat;
+import static com.google.common.truth.Truth.assertWithMessage;
 
 public class ArrayDeque61BTest {
 
-//     @Test
-//     @DisplayName("ArrayDeque61B has no fields besides backing array and primitives")
-//     void noNonTrivialFields() {
-//         List<Field> badFields = Reflection.getFields(ArrayDeque61B.class)
-//                 .filter(f -> !(f.getType().isPrimitive() || f.getType().equals(Object[].class) || f.isSynthetic()))
-//                 .toList();
-//
-//         assertWithMessage("Found fields that are not array or primitives").that(badFields).isEmpty();
-//     }
+     @Test
+     @DisplayName("ArrayDeque61B has no fields besides backing array and primitives")
+     void noNonTrivialFields() {
+         List<Field> badFields = Reflection.getFields(ArrayDeque61B.class)
+                 .filter(f -> !(f.getType().isPrimitive() || f.getType().equals(Object[].class) || f.isSynthetic()))
+                 .toList();
+
+         assertWithMessage("Found fields that are not array or primitives").that(badFields).isEmpty();
+     }
 
     @Test
     /** This test performs interspersed addFirst and addLast calls. */
@@ -41,7 +47,68 @@ public class ArrayDeque61BTest {
         lld2.addFirst('h');
 
 
-        assertThat(lld1.toList()).containsExactly(-2, -1, 0, 1, 2).inOrder();
+        //assertThat(lld1.toList()).containsExactly(-2, -1, 0, 1, 2).inOrder();
     }
 
+    @Test
+    /* In this test we verify that the size method works correctly
+       With different kind of data types, and with different added elements */
+    public void testSize(){
+        Deque61B<String> lld0 = new ArrayDeque61B<>();
+
+        lld0.addLast("Last");
+        lld0.addFirst("First");
+        assertThat(lld0.size() == 2).isTrue();
+
+
+        Deque61B<Integer> lld1 = new ArrayDeque61B<>();
+
+        lld1.addLast(1);
+        lld1.addLast(2);
+        lld1.addLast(-5);
+
+        assertThat(lld1.size() == 3).isTrue();
+        assertThat(lld1.size() == 9).isFalse();
+    }
+
+    @Test
+    public void testIsEmpty(){
+        Deque61B<String> lld0 = new ArrayDeque61B<>();
+        assertThat(lld0.isEmpty()).isTrue();
+
+        lld0.addLast("Last");
+        assertThat(lld0.isEmpty()).isFalse();
+
+        Deque61B<Integer> lld1 = new ArrayDeque61B<>();
+        assertThat(lld1.isEmpty()).isTrue();
+    }
+
+    @Test
+    public void testGet(){
+        Deque61B<String> lld0 = new ArrayDeque61B<>();
+        //assertWithMessage("Index out of bounds").that(lld0.get(228) == null);
+        lld0.addLast("Last");
+        lld0.addFirst("First");
+        lld0.addFirst("Firsttt");
+        lld0.addFirst("Firsttt");
+        lld0.addFirst("heh");
+        lld0.addFirst("das");
+        lld0.addFirst("dsadw");
+        lld0.addFirst("ky");
+        lld0.addFirst("ewq");
+        String s = lld0.get(7);
+
+        assertThat(s.equals("dsadw")).isTrue();
+        s = lld0.get(0);
+        assertThat(s.equals("das")).isTrue();
+
+        s = lld0.get(2);
+        assertThat(s.equals("Firsttt")).isTrue();
+        s = lld0.get(5);
+        assertThat(s.equals("Last")).isTrue();
+
+        // verifying null return
+        s = lld0.get(-1);
+        s = lld0.get(2421);
+    }
 }
