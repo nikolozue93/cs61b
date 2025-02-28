@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.List;
 
 public class ArrayDeque61B<T> implements Deque61B<T> {
@@ -39,7 +40,15 @@ public class ArrayDeque61B<T> implements Deque61B<T> {
 
     @Override
     public List<T> toList() {
-        return List.of();
+        List<T> returnList = new ArrayList<>();
+        for(int i = 0; i < items.length; i++) {
+            T item = this.get(i);
+
+            if(item != null) {
+                returnList.add(item);
+            }
+        }
+        return returnList;
     }
 
     @Override
@@ -49,7 +58,7 @@ public class ArrayDeque61B<T> implements Deque61B<T> {
 
     @Override
     public int size() {
-        return 0;
+        return size;
     }
 
     @Override
@@ -64,7 +73,7 @@ public class ArrayDeque61B<T> implements Deque61B<T> {
 
     @Override
     public T get(int index) {
-        if(isEmpty() || index < 0 || index >= size){
+        if(isEmpty() || index < 0 || index > size){
             return null;
         }
         return items[index];
