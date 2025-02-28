@@ -61,19 +61,49 @@ public class ArrayDeque61B<T> implements Deque61B<T> {
         return size;
     }
 
+    /**
+     * for these two methods, i think it will be better to start from 0-1?
+     * nop, so if we shouldnt use recursion/looping, we will directly
+     * go to nextLast, nextFirst, and with them we can know which one is the
+     * first and which one is the last
+     *
+     * To avoid messing with arrays index bounds, we make sure we in bounds
+     * with Math.floorMod method. Then we save that element in first.
+     * then we equate with the index that element to null and change nextFirst.
+     */
     @Override
     public T removeFirst() {
+        if(!isEmpty()){
+            int index = Math.floorMod(nextFirst + 1, items.length);
+            T first = this.get(index);
+
+            items[index] = null;
+            nextFirst = index;
+            size -= 1;
+
+            return first;
+        }
         return null;
     }
 
     @Override
     public T removeLast() {
+        if(!isEmpty()){
+            int index = Math.floorMod(nextLast - 1, items.length);
+            T last = this.get(index);
+
+            items[index] = null;
+            nextLast = index;
+            size -= 1;
+
+            return last;
+        }
         return null;
     }
 
     @Override
     public T get(int index) {
-        if(isEmpty() || index < 0 || index > size){
+        if(isEmpty() || index < 0 || index > items.length){
             return null;
         }
         return items[index];
