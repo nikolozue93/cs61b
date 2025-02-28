@@ -109,8 +109,29 @@ public class ArrayDeque61B<T> implements Deque61B<T> {
         return items[index];
     }
 
+    /**
+     * Having recursive get function here, is so stupid
+     */
+//    @Override
+//    public T getRecursive(int index) {
+//        if(isEmpty() || index > items.length || index < 0) {
+//            return null;
+//        }
+//
+//        if(index == 0) {
+//            return items[index];
+//        }
+//        return helper(0, index);
+//    }
+//
+//    public T helper(int starter, int index){
+//        if(starter == index){
+//            return items[starter];
+//        }
+//        return helper(starter + 1, index);
+//    }
     @Override
     public T getRecursive(int index) {
-        return null;
+        throw new UnsupportedOperationException("No need to implement getRecursive for proj 1b");
     }
 }
