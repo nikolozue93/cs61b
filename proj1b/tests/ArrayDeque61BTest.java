@@ -111,4 +111,61 @@ public class ArrayDeque61BTest {
         s = lld0.get(-1);
         s = lld0.get(2421);
     }
+
+    @Test
+    public void testRemoveFirst(){
+        Deque61B<String> lld1 = new ArrayDeque61B<>();
+
+        lld1.addFirst("back");
+        lld1.addFirst("middle");
+        lld1.addFirst("front");
+        lld1.addLast("Last");
+        lld1.removeFirst();
+
+        List<String> toList = lld1.toList();
+        assertThat(lld1.toList()).containsExactly( "middle", "back", "Last").inOrder();
+        assertThat(lld1.size() == 3).isTrue();
+
+        lld1.removeFirst();
+        toList = lld1.toList();
+        assertThat(lld1.toList()).containsExactly(  "back", "Last").inOrder();
+
+        lld1.removeFirst();
+        toList = lld1.toList();
+        assertThat(lld1.toList()).containsExactly(  "Last").inOrder();
+
+        lld1.removeFirst();
+        toList = lld1.toList();
+        assertThat(lld1.toList().isEmpty()).isTrue();
+
+        lld1.removeFirst();
+
+        assertThat(lld1.isEmpty()).isTrue();
+    }
+
+    @Test
+    public void testRemoveLast(){
+        Deque61B<String> lld1 = new ArrayDeque61B<>();
+
+        lld1.addFirst("back");
+        lld1.addFirst("middle");
+        lld1.addFirst("front");
+        lld1.addLast("Last");
+        lld1.removeLast();
+        assertThat(lld1.toList()).containsExactly( "front", "middle", "back").inOrder();
+        assertThat(lld1.size() == 3).isTrue();
+
+        lld1.removeLast();
+        assertThat(lld1.toList()).containsExactly(  "front", "middle").inOrder();
+
+        lld1.removeLast();
+        assertThat(lld1.toList()).containsExactly(  "front").inOrder();
+
+        lld1.removeLast();
+        assertThat(lld1.toList().isEmpty()).isTrue();
+
+        lld1.removeLast();
+
+        assertThat(lld1.isEmpty()).isTrue();
+    }
 }
