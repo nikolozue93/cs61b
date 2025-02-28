@@ -3,6 +3,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.google.common.truth.Truth.assertThat;
@@ -25,13 +26,11 @@ public class ArrayDeque61BTest {
     public void addFirstAndAddLastTest() {
         Deque61B<Integer> lld1 = new ArrayDeque61B<>();
 
-         /* I've decided to add in comments the state after each call for the convenience of the
-            person reading this test. Some programmers might consider this excessively verbose. */
-        lld1.addLast(0);   // [0]
-        lld1.addLast(1);   // [0, 1]
-        lld1.addFirst(-1); // [-1, 0, 1]
-        lld1.addLast(2);   // [-1, 0, 1, 2]
-        lld1.addFirst(-2); // [-2, -1, 0, 1, 2]
+        lld1.addLast(0);
+        lld1.addLast(1);
+        lld1.addFirst(-1);
+        lld1.addLast(2);
+        lld1.addFirst(-2);
         lld1.addFirst(3);
         lld1.addLast(4);
         lld1.addLast(8);
@@ -44,10 +43,11 @@ public class ArrayDeque61BTest {
         lld2.addLast('e');
         lld2.addFirst('f');
         lld2.addLast('g');
-        lld2.addFirst('h');
+        //lld2.addFirst('h');
 
+        List<Character> toList = lld2.toList();
 
-        //assertThat(lld1.toList()).containsExactly(-2, -1, 0, 1, 2).inOrder();
+        assertThat(lld2.toList()).containsExactly('e', 'g', 'f', 'c', 'a', 'b', 'd').inOrder();
     }
 
     @Test
