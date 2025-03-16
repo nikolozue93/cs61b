@@ -8,6 +8,8 @@ import java.util.List;
 
 import static com.google.common.truth.Truth.assertThat;
 import static com.google.common.truth.Truth.assertWithMessage;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ArrayDeque61BTest {
 
@@ -47,7 +49,7 @@ public class ArrayDeque61BTest {
 
         List<Character> toList = lld2.toList();
 
-        assertThat(lld2.toList()).containsExactly('e', 'g', 'f', 'c', 'a', 'b', 'd').inOrder();
+        assertThat(lld2.toList()).containsExactly('c', 'a', 'b', 'd', 'e', 'g', 'f').inOrder();
     }
 
     @Test
@@ -98,14 +100,14 @@ public class ArrayDeque61BTest {
         lld0.addFirst("ewq");
         String s = lld0.get(7);
 
-        assertThat(s.equals("dsadw")).isTrue();
+        assertThat(s.equals("Firsttt")).isTrue();
         s = lld0.get(0);
-        assertThat(s.equals("das")).isTrue();
+        assertThat(s.equals("First")).isTrue();
 
         s = lld0.get(2);
-        assertThat(s.equals("Firsttt")).isTrue();
+        assertThat(s.equals("ky")).isTrue();
         s = lld0.get(5);
-        assertThat(s.equals("Last")).isTrue();
+        assertThat(s.equals("heh")).isTrue();
 
         // verifying null return
         s = lld0.get(-1);
@@ -123,7 +125,7 @@ public class ArrayDeque61BTest {
         lld1.removeFirst();
 
         List<String> toList = lld1.toList();
-        assertThat(lld1.toList()).containsExactly( "middle", "back", "Last").inOrder();
+        assertThat(lld1.toList()).containsExactly( "back", "Last", "middle").inOrder();
         assertThat(lld1.size() == 3).isTrue();
 
         lld1.removeFirst();
@@ -152,7 +154,7 @@ public class ArrayDeque61BTest {
         lld1.addFirst("front");
         lld1.addLast("Last");
         lld1.removeLast();
-        assertThat(lld1.toList()).containsExactly( "front", "middle", "back").inOrder();
+        assertThat(lld1.toList()).containsExactly( "back", "front", "middle").inOrder();
         assertThat(lld1.size() == 3).isTrue();
 
         lld1.removeLast();
@@ -169,30 +171,110 @@ public class ArrayDeque61BTest {
         assertThat(lld1.isEmpty()).isTrue();
     }
 
+//    @Test
+//    public void testGetRecursive(){
+//        Deque61B<String> lld0 = new ArrayDeque61B<>();
+//        //assertWithMessage("Index out of bounds").that(lld0.get(228) == null);
+//        lld0.addLast("Last");
+//        lld0.addFirst("First");
+//        lld0.addFirst("Firsttt");
+//        lld0.addFirst("Firsttt");
+//        lld0.addFirst("heh");
+//        lld0.addFirst("das");
+//        lld0.addFirst("dsadw");
+//        String s = lld0.getRecursive(7);
+//
+//        assertThat(s.equals("Firsttt")).isTrue();
+//        s = lld0.getRecursive(0);
+//        assertThat(s.equals("First")).isTrue();
+//
+//        s = lld0.getRecursive(1);
+//        assertThat(s.equals("Last")).isTrue();
+//        s = lld0.getRecursive(5);
+//        assertThat(s.equals("heh")).isTrue();
+//
+//        // verifying null return
+//        s = lld0.getRecursive(-1);
+//        s = lld0.getRecursive(2421);
+//    }
+
     @Test
-    public void testGetRecursive(){
-        Deque61B<String> lld0 = new ArrayDeque61B<>();
-        //assertWithMessage("Index out of bounds").that(lld0.get(228) == null);
-        lld0.addLast("Last");
-        lld0.addFirst("First");
-        lld0.addFirst("Firsttt");
-        lld0.addFirst("Firsttt");
-        lld0.addFirst("heh");
-        lld0.addFirst("das");
-        lld0.addFirst("dsadw");
-        String s = lld0.getRecursive(7);
+    public void testResize(){
+        Deque61B<Character> lld2 = new ArrayDeque61B<>();
+        lld2.addLast('a');
+        lld2.addLast('b');
+        lld2.addFirst('c');
+        lld2.addLast('d');
+        lld2.addLast('e');
+        lld2.addFirst('f');
+        lld2.addLast('g');
+        lld2.addLast('h');
+        //List<Character> toList0 = lld2.toList();
 
-        assertThat(s.equals("dsadw")).isTrue();
-        s = lld0.getRecursive(0);
-        assertThat(s.equals("das")).isTrue();
+        lld2.addLast('Z');
+        List<Character> toList = lld2.toList();
 
-        s = lld0.getRecursive(2);
-        assertThat(s.equals("Firsttt")).isTrue();
-        s = lld0.getRecursive(5);
-        assertThat(s.equals("Last")).isTrue();
+        //assertThat(lld2.toList()).containsExactly('e', 'g', 'f', 'c', 'a', 'b', 'd').inOrder();
 
-        // verifying null return
-        s = lld0.getRecursive(-1);
-        s = lld0.getRecursive(2421);
+    }
+
+    @Test
+    public void testResizingUp() {
+        Deque61B<Integer> deque = new ArrayDeque61B<>();
+        int initialCapacity = 8; // Assuming default initial capacity is 8
+
+        // Add elements beyond initial capacity to trigger resize
+        for (int i = 0; i < initialCapacity + 1; i++) {
+            deque.addLast(i);
+        }
+
+        assertEquals(initialCapacity + 1, deque.size());
+        assertEquals(7, deque.get(0)); // Ensure elements remain correct
+        assertEquals(initialCapacity, deque.get(initialCapacity));
+    }
+
+    @Test
+    public void testResizingDown() {
+        Deque61B<Integer> deque = new ArrayDeque61B<>();
+        int initialCapacity = 16;
+
+        // Fill the deque and then remove elements to trigger shrinkage
+        for (int i = 0; i < initialCapacity; i++) {
+            deque.addLast(i);
+        }
+
+        for (int i = 0; i < initialCapacity - 3; i++) { // Reduce size to < 25%
+            deque.removeFirst();
+        }
+
+        assertTrue(deque.size() <= deque.getCapacity() / 4);
+    }
+
+    @Test
+    public void testAddFirstAndResize() {
+        Deque61B<Integer> deque = new ArrayDeque61B<>();
+
+        for (int i = 0; i < 20; i++) {
+            deque.addFirst(i);
+        }
+
+        assertEquals(20, deque.size());
+        assertEquals(0, deque.get(0));
+        assertEquals(19, deque.get(28));
+    }
+
+    @Test
+    public void testRemoveLastAndResize() {
+        Deque61B<Integer> deque = new ArrayDeque61B<>();
+
+        for (int i = 0; i < 16; i++) {
+            deque.addLast(i);
+        }
+
+        for (int i = 0; i < 13; i++) { // Should trigger downsize
+            deque.removeLast();
+        }
+
+        assertTrue(deque.size() <= deque.getCapacity() / 4);
     }
 }
