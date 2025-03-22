@@ -247,7 +247,7 @@ public class ArrayDeque61BTest {
             deque.removeFirst();
         }
 
-        assertTrue(deque.size() <= deque.getCapacity() / 4);
+        assertTrue(deque.size() >= deque.getCapacity() / 4);
     }
 
     @Test
@@ -272,9 +272,9 @@ public class ArrayDeque61BTest {
         }
 
         for (int i = 0; i < 13; i++) { // Should trigger downsize
-            deque.removeLast();
+            deque.removeFirst();
         }
 
-        assertTrue(deque.size() <= deque.getCapacity() / 4);
+     assertTrue(deque.size() >= deque.getCapacity() / 4);
     }
 }
