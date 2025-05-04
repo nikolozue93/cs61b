@@ -162,8 +162,6 @@ public class Percolation {
     }
 
     public boolean percolates() {
-        // TODO
-        // if upper and lower bounds are connected (in union) return true
         return wqUnion.connected(virtualTop, virtualBottom);
     }
 
