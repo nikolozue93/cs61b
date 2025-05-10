@@ -3,102 +3,58 @@ import java.sql.Array;
 
 
 public class Percolation {
-    boolean[][] opened;
-    boolean[][] filled;
-    int openSite;
-    int N;
-    WeightedQuickUnionUF wqUnion;
+    private boolean[][] opened;
+    private static final int[][] dirs = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+
+    private int openSite;
+    private final int N;
+    private final int top, bottom;
+
+    private final WeightedQuickUnionUF percolationUF, fullnessUF;
 
     public Percolation(int N) {
         this.N = N;
-        opened = new boolean[N][N];  // to keep up with open sites
-        filled = new boolean[N][N];
+        opened = new boolean[N][N];
         openSite = 0;
-        wqUnion = new WeightedQuickUnionUF(N * N);
 
-        // filling the first row
-        for (int i = 0; i < N; i++) {
-            filled[0][i] = true;
-        }
+        percolationUF = new WeightedQuickUnionUF(N * N + 2); // union with top and bottom
+        fullnessUF = new WeightedQuickUnionUF(N * N + 1); // union with only top
+
+        top = N * N;
+        bottom = N * N + 1;
     }
 
-    public void open(int row, int col) {
-        if (!isOpen(row, col)) {
+    public void open(int row, int col){
+        if(!isOpen(row, col)) {
             opened[row][col] = true;
             openSite++;
 
-            int p, q; // for 1d corresponding number
-
-            int x = row;
-            int y = col;
-            if (x + 1 < N) {
-                if (isOpen(x + 1, y)) {
-                    p = xyTo1d(x, y);  // 1d value
-                    q = xyTo1d(x + 1, y);
-
-                    wqUnion.union(p, q);
-
-                    // first we check if they got connected
-                    // then we check if either of those two are filled
-                    // and then we fill them
-                    if (wqUnion.connected(p, q)) {
-                        if (isFull(x, y) || isFull(x + 1, y)) {
-                            filled[x][y] = true;
-                            filled[x + 1][y] = true;
-                        }
-                    }
-                }
+            int p = xyTo1d(row, col);
+            if (row == 0) {
+                percolationUF.union(top, p);
+                fullnessUF.union(top, p);
+            }
+            if (row == N - 1) {
+                percolationUF.union(bottom, p);
             }
 
-            if (x - 1 >= 0) {
-                if (isOpen(x - 1, y)) {
-                    p = xyTo1d(x, y);
-                    q = xyTo1d(x - 1, y);
+            // iterating through directions, previous approach got
+            // crammed and made easier, rather than checking manually
+            for (int[] dir : dirs) {
+                int newRow = row + dir[0];
+                int newCol = col + dir[1];
 
-                    wqUnion.union(p, q);
-
-                    if (wqUnion.connected(p, q)) {
-                        if (isFull(x, y) || isFull(x - 1, y)) {
-                            filled[x][y] = true;
-                            filled[x - 1][y] = true;
-                        }
-                    }
-                }
-            }
-
-            if (y + 1 < N) {
-                if (isOpen(x, y + 1)) {
-                    p = xyTo1d(x, y);
-                    q = xyTo1d(x, y + 1);
-
-                    wqUnion.union(p, q);
-
-                    if (wqUnion.connected(p, q)) {
-                        if (isFull(x, y) || isFull(x, y + 1)) {
-                            filled[x][y] = true;
-                            filled[x][y + 1] = true;
-                        }
-                    }
-                }
-            }
-
-            if (y - 1 >= 0) {
-                if (isOpen(x, y - 1)) {
-                    p = xyTo1d(x, y);
-                    q = xyTo1d(x, y - 1);
-
-                    wqUnion.union(p, q);
-
-                    if (wqUnion.connected(p, q)) {
-                        if (isFull(x, y) || isFull(x, y - 1)) {
-                            filled[x][y] = true;
-                            filled[x][y - 1] = true;
-                        }
+                if (newRow >= 0 && newRow < N && newCol >= 0 && newCol < N) {
+                    if (isOpen(newRow, newCol)) {
+                        int q = xyTo1d(newRow, newCol);
+                        percolationUF.union(p, q);
+                        fullnessUF.union(p, q);
                     }
                 }
             }
         }
     }
+
 
     public boolean isOpen(int row, int col) {
         validate(row, col);
@@ -106,38 +62,17 @@ public class Percolation {
         return opened[row][col];
     }
 
-    public boolean isFull(int row, int col) {
-        if (isOpen(row, col)) {
-            int p, q;
-            q = xyTo1d(row, col);
-
-            for (int i = 0; i < N; i++) {
-                p = xyTo1d(0, i);
-                if (wqUnion.connected(p, q)) {
-                    return true;
-                }
-            }
-        }
-        return false;
+    public boolean isFull(int row, int col){
+        // checking for connection with virtual top, index N * N
+        return fullnessUF.connected(top, xyTo1d(row, col));
     }
 
     public int numberOfOpenSites() {
         return openSite;
     }
 
-    public boolean percolates() {
-        int p, q;
-        for (int i = 0; i < N; i++) {
-            p = xyTo1d(0, i);
-
-            for (int j = 0; j < N; j++) {
-                q = xyTo1d(N - 1, j);
-                if (wqUnion.connected(p, q)) {
-                    return true;
-                }
-            }
-        }
-        return false;
+    public boolean percolates(){
+        return percolationUF.connected(top, bottom);
     }
 
     // transforming 2d array to 1d, by giving it the corresponding number
@@ -153,4 +88,64 @@ public class Percolation {
         }
     }
 
+    // old-new approach with only WQs
+    //    public void open(int row, int col){
+//        if(!isOpen(row, col)){
+//            opened[row][col] = true;
+//            openSite++;
+//
+//            if(row == 0){
+//                int q = xyTo1d(row, col);
+//                fullnessUF.union(top, q);
+//                percolationUF.union(top, q);
+//            }
+//
+//            if(row == N - 1){
+//                int q = xyTo1d(row, col);
+//                percolationUF.union(bottom, q);
+//            } else {
+//                int p, q; // for 1d corresponding number
+//
+//                if (row + 1 < N) {
+//                    if (isOpen(row + 1, col)) {
+//                        p = xyTo1d(row, col);  // 1d value
+//                        q = xyTo1d(row + 1, col);
+//
+//                        percolationUF.union(p, q);
+//                        fullnessUF.union(p,q);
+//                    }
+//                }
+//
+//                if (row - 1 >= 0) {
+//                    if (isOpen(row - 1, col)) {
+//                        p = xyTo1d(row, col);
+//                        q = xyTo1d(row - 1, col);
+//
+//                        percolationUF.union(p, q);
+//                        fullnessUF.union(p,q);
+//                    }
+//                }
+//
+//                if (col + 1 < N) {
+//                    if (isOpen(row, col + 1)) {
+//                        p = xyTo1d(row, col);
+//                        q = xyTo1d(row, col + 1);
+//
+//                        percolationUF.union(p, q);
+//                        fullnessUF.union(p,q);
+//                    }
+//                }
+//
+//                if (col - 1 >= 0) {
+//                    if (isOpen(row, col - 1)) {
+//                        p = xyTo1d(row, col);
+//                        q = xyTo1d(row, col - 1);
+//
+//                        percolationUF.union(p, q);
+//                        fullnessUF.union(p,q);
+//                    }
+//                }
+//            }
+//        }
+//    }
 }
