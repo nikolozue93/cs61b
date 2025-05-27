@@ -38,9 +38,37 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
      */
     @Override
     public void put(K key, V value) {
-        if(this.containsKey(key)){
-            this.Node = new Node(key, value, this.size());
+        if(key == null){
+            throw new IllegalArgumentException();
         }
+
+        put(root, key, value);
+    }
+
+    /**
+     * Helper method for put
+     * @param x
+     * @param key
+     * @param value
+     * @return
+     */
+    private Node put(Node x, K key, V value){
+        if(x == null) {
+            return new Node(key, value, 1);
+        }
+
+        int compare = key.compareTo(x.key);
+        if(compare == 0) {
+            return new Node(key, value, x.size);
+        } else if(compare < 0) {
+            x.right = new Node(key,value, 1);
+        } else if(compare > 0) {
+            x.left = new Node(key, value, 1);
+        }
+
+        x.size = 1 + size(x.left) + size(x.right);
+
+        return x;
     }
 
     /**
@@ -51,7 +79,25 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
      */
     @Override
     public V get(K key) {
-        return null;
+        if(key == null){
+            throw new IllegalArgumentException();
+        }
+        return get(root, key);
+    }
+
+    private V get(Node x, K key){
+        if(x == null) {
+            return null;
+        }
+        int compare = key.compareTo(x.key);
+
+        if(compare < 0){
+            return get(x.left, key);
+        } else if(compare > 0){
+            return get(x.right, key);
+        } else {
+            return x.val;
+        }
     }
 
     /**
@@ -61,6 +107,10 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
      */
     @Override
     public boolean containsKey(K key) {
+        int compare = key.compareTo(this.root.key);
+
+        if(compare == 0)
+
         return false;
     }
 
@@ -69,7 +119,14 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
      */
     @Override
     public int size() {
-        return root.size;
+        return size(root);
+    }
+
+    private int size(Node x){
+        if(x == null){
+            return 0;
+        }
+        return x.size;
     }
 
     /**
