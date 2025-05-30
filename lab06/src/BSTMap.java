@@ -59,11 +59,11 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
 
         int compare = key.compareTo(x.key);
         if(compare == 0) {
-            return new Node(key, value, x.size);
+            x.val = value;
         } else if(compare < 0) {
-            x.right = new Node(key,value, 1);
+            x.left = put(x.left, key,value );
         } else if(compare > 0) {
-            x.left = new Node(key, value, 1);
+            x.right = put(x.right, key, value);
         }
 
         x.size = 1 + size(x.left) + size(x.right);
@@ -107,11 +107,23 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
      */
     @Override
     public boolean containsKey(K key) {
-        int compare = key.compareTo(this.root.key);
+        if(key == null){
+            throw new IllegalArgumentException();
+        }
 
-        if(compare == 0)
+        return containsKey(root, key);
+    }
 
-        return false;
+    private boolean containsKey(Node x, K key){
+        int compare = key.compareTo(x.key);
+
+        if(compare > 0){
+            return containsKey(x.right, key);
+        } else if(compare < 0){
+            return containsKey(x.left, key);
+        } else {
+            return true;
+        }
     }
 
     /**
@@ -138,12 +150,55 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
     }
 
     /**
+     * These two select methods are helper for print in order
+     * As we are interested in having order, we start traversing
+     * left subtree, which we get via variable t. if t is more than k
+     * that it means the node we are looking for is in the left subtree
+     * we go through this with recursion and when k > t, we go to the right
+     *
+     * where we subtract t + 1 from k, t is from the left subtree and that 1 is x itself
+     * t (left nodes) + 1 (current node) = t + 1 total nodes before right subtree
+     * @param k
+     * @return
+     */
+    private Node select(int k){
+        if(k < 0 || k > size()){
+            throw new IllegalArgumentException();
+        }
+
+        return select(root, k);
+    }
+
+    // see the above explanation
+    private Node select(Node x, int k){
+        if(x == null){
+            return null;
+        }
+
+        int t = size(x.left);
+        if(t > k){
+            return select(x.left, k);
+        } else if(t < k){
+            return select(x.right, k - t - 1);
+        } else {
+            return x;
+        }
+    }
+
+
+
+
+    /**
      * Returns a Set view of the keys contained in this map. Not required for Lab 7.
      * If you don't implement this, throw an UnsupportedOperationException.
      */
     @Override
     public Set<K> keySet() {
-        return Set.of();
+        Set<K> BSTSet = new HashSet<>();
+        for(int i = 0; i < root.size; i++){
+            BSTSet.add(select(i).key);
+        }
+        return BSTSet;
     }
 
     /**
@@ -168,6 +223,8 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
      * Prints out your BSTMap in order of increasing Key.
      */
     public void printInOrder(){
-
+        for(int i = 0; i < root.size; i++){
+            System.out.println(select(i).key + "  " + select(i).val);
+        }
     }
 }
