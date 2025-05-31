@@ -1,6 +1,6 @@
-import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.Set;
-import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Stack;
 
 public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
@@ -24,10 +24,6 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
 
     }
 
-    public int compareRoots(Node other) {
-        return 0;
-    }
-
     /**
      * Associates the specified value with the specified key in this map.
      * If the map already contains the specified key, replaces the key's mapping
@@ -42,7 +38,7 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
             throw new IllegalArgumentException();
         }
 
-        put(root, key, value);
+        root = put(root, key, value);
     }
 
     /**
@@ -111,10 +107,15 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
             throw new IllegalArgumentException();
         }
 
+
         return containsKey(root, key);
     }
 
     private boolean containsKey(Node x, K key){
+        if (x == null) {
+            return false;
+        }
+
         int compare = key.compareTo(x.key);
 
         if(compare > 0){
@@ -146,7 +147,7 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
      */
     @Override
     public void clear() {
-        this.root = null;
+        root = null;
     }
 
     /**
@@ -186,19 +187,67 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
     }
 
 
-
-
     /**
      * Returns a Set view of the keys contained in this map. Not required for Lab 7.
      * If you don't implement this, throw an UnsupportedOperationException.
      */
     @Override
     public Set<K> keySet() {
-        Set<K> BSTSet = new HashSet<>();
+        // LinkedHashSet preserves insertion order
+        // when we retrieve keys with select in sorted order
+        // this data struct helps us to preserve this order
+        // unlike HashSet
+        Set<K> BSTSet = new LinkedHashSet<>();
         for(int i = 0; i < root.size; i++){
             BSTSet.add(select(i).key);
         }
         return BSTSet;
+    }
+
+    private K min(){
+        return min(root).key;
+    }
+
+    private Node min(Node x){
+        if(x.left == null){
+            return x;
+        }
+        return min(x.left);
+    }
+
+    private K max(){
+        return max(root).key;
+    }
+
+    private Node max(Node x){
+        if(x.right == null){
+            return x;
+        }
+        return max(x.right);
+    }
+
+    private void deleteMin(){
+        root = deleteMin(root);
+    }
+
+    /**
+     * Here if we dont have left subtree, we return right one
+     * as it means that the root is the smallest element
+     *
+     * even if we have left subtree, we recursively go down
+     * and when we reach the last element which has no children on the left
+     * we return its right node, changing its parent pointer to its childs right one
+     * even if its right is null or actual node,
+     * doesnt matter, the smallest one is deleted
+     */
+    private Node deleteMin(Node x){
+        if(x.left == null){
+            return x.right;
+        }
+
+        x.left = deleteMin(x.left);
+        x.size = size(x.left) + size(x.right) + 1;
+        return x;
     }
 
     /**
@@ -211,12 +260,98 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
      */
     @Override
     public V remove(K key) {
-        return null;
+        if(!containsKey(key)){
+            return null;
+        }
+
+        V toRemove = get(key);
+        root = remove(root, key);
+        return toRemove;
     }
 
+    /**
+     * If the given key is greater than the current node's key,
+     * we recursively search in the right subtree. If it’s less,
+     * we go into the left subtree.
+     *
+     * If compare == 0, we've found the node to remove.
+     *
+     * We then check if the node has 0 or 1 child:
+     * - If the right child is null, we return the left child.
+     * - If the left child is null, we return the right child.
+     * This effectively deletes the node and replaces it with
+     * its only child, or null if it has no children.
+     *
+     * If the node has two children:
+     * - We store a reference to the current node (t).
+     * - Then we find the smallest node in the right subtree
+     *   (the in-order successor) and assign it to x.
+     * - We delete that successor from the right subtree
+     *   using deleteMin.
+     * - We assign t.left (the original left subtree) to x.left.
+     * This replaces the deleted node with its successor, while
+     * preserving the BST structure.
+     */
+
+    private Node remove(Node x, K key){
+        if(x == null){
+            return null;
+        }
+
+        int compare = key.compareTo(x.key);
+        if(compare > 0) {
+            x.right = remove(x.right, key);
+        } else if(compare < 0) {
+            x.left = remove(x.left, key);
+        } else {
+            if (x.right == null) return x.left;
+            if (x.left == null) return x.right;
+
+            Node t = x;
+            x = min(t.right);
+            x.right = deleteMin(t.right);
+            x.left = t.left;
+        }
+
+        x.size = size(x.left) + size(x.right) + 1;
+        return x;
+    }
+
+    /* Iterator of the BSTMap. */
     @Override
     public Iterator<K> iterator() {
-        return null;
+        return new BSTIterator(root);
+    }
+
+    private class BSTIterator implements Iterator<K> {
+        private Stack<Node> stack = new Stack<>();
+
+        public BSTIterator(Node src) {
+            while (src != null) {
+                // Push root node and all left nodes to the stack.
+                stack.push(src);
+                src = src.left;
+            }
+        }
+
+        @Override
+        public boolean hasNext() {
+            return !stack.isEmpty();
+        }
+
+        @Override
+        public K next() {
+            Node curr = stack.pop();
+
+            if (curr.right != null) {
+                Node temp = curr.right;
+                while (temp != null) {
+                    stack.push(temp);
+                    temp = temp.left;
+                }
+            }
+            return curr.key;
+        }
     }
 
     /**
