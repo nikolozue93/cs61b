@@ -2,7 +2,7 @@ import org.junit.jupiter.api.Test;
 
 import static com.google.common.truth.Truth.assertThat;
 import static com.google.common.truth.Truth.assertWithMessage;
-
+import static org.testng.AssertJUnit.assertEquals;
 
 
 public class TestRedBlackTree {
@@ -99,9 +99,12 @@ public class TestRedBlackTree {
         // right
         assertThat(rbtree.root.right).isNull();
 
-        assertWithMessage("Number of Calls to Flip Colors after inserting (10, 5) in order").that(callsToFlipColors).isEqualTo(0);
-        assertWithMessage("Number of Calls to Flip Colors after inserting (10, 5) in order").that(callsToRotateLeft).isEqualTo(0);
-        assertWithMessage("Number of Calls to Flip Colors after inserting (10, 5) in order").that(callsToRotateRight).isEqualTo(0);
+        assertEquals("Expected 0 calls to flipColors", 0, callsToFlipColors);
+        assertEquals("Expected 0 calls to flipColors", 0, callsToRotateLeft);
+        assertEquals("Expected 0 calls to flipColors", 0, callsToRotateRight);
+        //assertWithMessage("Number of Calls to Flip Colors after inserting (10, 5) in order").that(callsToFlipColors).isEqualTo(0);
+        //assertWithMessage("Number of Calls to Flip Colors after inserting (10, 5) in order").that(callsToRotateLeft).isEqualTo(0);
+        //assertWithMessage("Number of Calls to Flip Colors after inserting (10, 5) in order").that(callsToRotateRight).isEqualTo(0);
 
     }
 
@@ -148,9 +151,13 @@ public class TestRedBlackTree {
         // right.right
         assertThat(rbtree.root.right.right).isNull();
 
-        assertWithMessage("Number of Calls to Flip Colors after inserting (10, 5, 15) in order").that(callsToFlipColors).isEqualTo(1);
-        assertWithMessage("Number of Calls to Rotate Left after inserting (10, 5, 15) in order").that(callsToRotateLeft).isEqualTo(0);
-        assertWithMessage("Number of Calls to Rotate Right after inserting (10, 5, 15) in order").that(callsToRotateRight).isEqualTo(0);
+        assertEquals("Expected 0 calls to flipColors", 1, callsToFlipColors);
+        assertEquals("Expected 0 calls to flipColors", 0, callsToRotateLeft);
+        assertEquals("Expected 0 calls to flipColors", 0, callsToRotateRight);
+
+//        assertWithMessage("Number of Calls to Flip Colors after inserting (10, 5, 15) in order").that(callsToFlipColors).isEqualTo(1);
+//        assertWithMessage("Number of Calls to Rotate Left after inserting (10, 5, 15) in order").that(callsToRotateLeft).isEqualTo(0);
+//        assertWithMessage("Number of Calls to Rotate Right after inserting (10, 5, 15) in order").that(callsToRotateRight).isEqualTo(0);
     }
 
 
@@ -187,9 +194,13 @@ public class TestRedBlackTree {
         // right
         assertThat(rbtree.root.right).isNull();
 
-        assertWithMessage("Number of Calls to Flip Colors after inserting (10, 15) in order").that(callsToFlipColors).isEqualTo(0);
-        assertWithMessage("Number of Calls to Rotate Left after inserting (10, 15) in order").that(callsToRotateLeft).isEqualTo(1);
-        assertWithMessage("Number of Calls to Rotate Right after inserting (10, 15) in order").that(callsToRotateRight).isEqualTo(0);
+        assertEquals("Expected 0 calls to flipColors", 0, callsToFlipColors);
+        assertEquals("Expected 0 calls to flipColors", 1, callsToRotateLeft);
+        assertEquals("Expected 0 calls to flipColors", 0, callsToRotateRight);
+
+//        assertWithMessage("Number of Calls to Flip Colors after inserting (10, 15) in order").that(callsToFlipColors).isEqualTo(0);
+//        assertWithMessage("Number of Calls to Rotate Left after inserting (10, 15) in order").that(callsToRotateLeft).isEqualTo(1);
+//        assertWithMessage("Number of Calls to Rotate Right after inserting (10, 15) in order").that(callsToRotateRight).isEqualTo(0);
     }
 
 
@@ -239,9 +250,13 @@ public class TestRedBlackTree {
         assertThat(rbtree.root.right.right).isNull();
 
         // Not possible to test rotate right without calling color flip in the same insert, if implemented correctly
-        assertWithMessage("Number of Calls to Flip Colors after inserting (5, 3, 10) in order").that(callsToFlipColors).isEqualTo(1);
-        assertWithMessage("Number of Calls to Rotate Left after inserting (5, 3, 10) in order").that(callsToRotateLeft).isEqualTo(0);
-        assertWithMessage("Number of Calls to Rotate Right after inserting (5, 3, 10) in order").that(callsToRotateRight).isEqualTo(1);
+        assertEquals("Expected 0 calls to flipColors", 1, callsToFlipColors);
+        assertEquals("Expected 0 calls to flipColors", 0, callsToRotateLeft);
+        assertEquals("Expected 0 calls to flipColors", 1, callsToRotateRight);
+
+//        assertWithMessage("Number of Calls to Flip Colors after inserting (5, 3, 10) in order").that(callsToFlipColors).isEqualTo(1);
+//        assertWithMessage("Number of Calls to Rotate Left after inserting (5, 3, 10) in order").that(callsToRotateLeft).isEqualTo(0);
+//        assertWithMessage("Number of Calls to Rotate Right after inserting (5, 3, 10) in order").that(callsToRotateRight).isEqualTo(1);
     }
 
 
@@ -288,9 +303,13 @@ public class TestRedBlackTree {
         // right.right
         assertThat(rbtree.root.right.right).isNull();
 
-        assertWithMessage("Number of Calls to Flip Colors after inserting (10, 7, 5) in order").that(callsToFlipColors).isEqualTo(1);
-        assertWithMessage("Number of Calls to Rotate Left after inserting (10, 7, 5) in order").that(callsToRotateLeft).isEqualTo(1);
-        assertWithMessage("Number of Calls to Rotate Right after inserting (10, 7, 5) in order").that(callsToRotateRight).isEqualTo(1);
+        assertEquals("Expected 0 calls to flipColors", 1, callsToFlipColors);
+        assertEquals("Expected 0 calls to flipColors", 1, callsToRotateLeft);
+        assertEquals("Expected 0 calls to flipColors", 1, callsToRotateRight);
+
+//        assertWithMessage("Number of Calls to Flip Colors after inserting (10, 7, 5) in order").that(callsToFlipColors).isEqualTo(1);
+//        assertWithMessage("Number of Calls to Rotate Left after inserting (10, 7, 5) in order").that(callsToRotateLeft).isEqualTo(1);
+//        assertWithMessage("Number of Calls to Rotate Right after inserting (10, 7, 5) in order").that(callsToRotateRight).isEqualTo(1);
     }
 
 
@@ -353,10 +372,13 @@ public class TestRedBlackTree {
         assertThat(rbtree.root.right.right.isBlack).isTrue();
         assertThat(rbtree.root.right.right.item).isEqualTo(11);
 
-        assertWithMessage("Number of Calls to Flip Colors after inserting (5, 11, 3, 9, 7, 1, 2) in order").that(callsToFlipColors).isEqualTo(4);
-        assertWithMessage("Number of Calls to Rotate Left after inserting (5, 11, 3, 9, 7, 1, 2) in order").that(callsToRotateLeft).isEqualTo(3);
-        assertWithMessage("Number of Calls to Rotate Right after inserting (5, 11, 3, 9, 7, 1, 2) in order").that(callsToRotateRight).isEqualTo(4);
-        
+        assertEquals("Expected 0 calls to flipColors", 4, callsToFlipColors);
+        assertEquals("Expected 0 calls to flipColors", 3, callsToRotateLeft);
+        assertEquals("Expected 0 calls to flipColors", 4, callsToRotateRight);
+
+//        assertWithMessage("Number of Calls to Flip Colors after inserting (5, 11, 3, 9, 7, 1, 2) in order").that(callsToFlipColors).isEqualTo(4);
+//        assertWithMessage("Number of Calls to Rotate Left after inserting (5, 11, 3, 9, 7, 1, 2) in order").that(callsToRotateLeft).isEqualTo(3);
+//        assertWithMessage("Number of Calls to Rotate Right after inserting (5, 11, 3, 9, 7, 1, 2) in order").that(callsToRotateRight).isEqualTo(4);
     }
 
     @Test
@@ -433,9 +455,13 @@ public class TestRedBlackTree {
         assertThat(rbtree.root.right.right.isBlack).isTrue();
         assertThat(rbtree.root.right.right.item).isEqualTo(9);
 
-        assertWithMessage("Number of Calls to Flip Colors after inserting (9, 8, 7, 6, 5, 4, 3, 2, 1) in order").that(callsToFlipColors).isEqualTo(5);
-        assertWithMessage("Number of Calls to Rotate Left after inserting (9, 8, 7, 6, 5, 4, 3, 2, 1) in order").that(callsToRotateLeft).isEqualTo(0);
-        assertWithMessage("Number of Calls to Rotate Right after inserting (9, 8, 7, 6, 5, 4, 3, 2, 1) in order").that(callsToRotateRight).isEqualTo(5);
+        assertEquals("Expected 0 calls to flipColors", 5, callsToFlipColors);
+        assertEquals("Expected 0 calls to flipColors", 0, callsToRotateLeft);
+        assertEquals("Expected 0 calls to flipColors", 5, callsToRotateRight);
+
+//        assertWithMessage("Number of Calls to Flip Colors after inserting (9, 8, 7, 6, 5, 4, 3, 2, 1) in order").that(callsToFlipColors).isEqualTo(5);
+//        assertWithMessage("Number of Calls to Rotate Left after inserting (9, 8, 7, 6, 5, 4, 3, 2, 1) in order").that(callsToRotateLeft).isEqualTo(0);
+//        assertWithMessage("Number of Calls to Rotate Right after inserting (9, 8, 7, 6, 5, 4, 3, 2, 1) in order").that(callsToRotateRight).isEqualTo(5);
     }
 
 

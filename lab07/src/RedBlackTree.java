@@ -64,8 +64,9 @@ public class RedBlackTree<T extends Comparable<T>> {
      */
     RBTreeNode<T> rotateRight(RBTreeNode<T> node) {
         // TODO: YOUR CODE HERE
-        node.left.isBlack = node.isBlack;
-        node.isBlack = !node.isBlack;
+        boolean t = node.isBlack;
+        node.isBlack = node.left.isBlack;
+        node.left.isBlack = t;
 
         RBTreeNode<T> temp = node.left;
         node.left = temp.right;
@@ -82,8 +83,9 @@ public class RedBlackTree<T extends Comparable<T>> {
      * @return
      */
     RBTreeNode<T> rotateLeft(RBTreeNode<T> node) {
-        node.right.isBlack = node.isBlack;
-        node.isBlack = !node.isBlack;
+        boolean t = node.isBlack;
+        node.isBlack = node.right.isBlack;
+        node.right.isBlack = t;
 
         RBTreeNode<T> temp = node.right;
         node.right = temp.left;
@@ -122,7 +124,7 @@ public class RedBlackTree<T extends Comparable<T>> {
     private RBTreeNode<T> insert(RBTreeNode<T> node, T item) {
         // TODO: Insert (return) new red leaf node.
         if(node == null){
-            return new RBTreeNode<>(false, item); // or true
+            return new RBTreeNode<>(false, item);
         }
 
         // TODO: Handle normal binary search tree insertion.
@@ -135,13 +137,20 @@ public class RedBlackTree<T extends Comparable<T>> {
         }
 
         // TODO: Rotate left operation
-        if(node.left == null && isRed(node.right)){
-            rotateLeft(node);
+        // by one of the rules if the left child of node a is black or doesn’t exist
+        // we rotate left
+        if (isRed(node.right) && !isRed(node.left)){
+            node = rotateLeft(node);
         }
 
+//        if(node.left == null && isRed(node.right)){
+//            node = rotateLeft(node);
+//        }
+
         // TODO: Rotate right operation
+        // if two consecutive left children are red, we rotate right
         if(isRed(node.left)  && isRed(node.left.left)){
-            rotateRight(node);
+            node = rotateRight(node);
         }
 
         // TODO: Color flip
@@ -149,7 +158,7 @@ public class RedBlackTree<T extends Comparable<T>> {
             flipColors(node);
         }
 
-        return node; //fix this return statement
+        return node;
     }
 
 }
