@@ -39,6 +39,7 @@ public class TimeSeries extends TreeMap<Integer, Double> {
             if(year >= MIN_YEAR && year <= MAX_YEAR){
                 tsCopy.put(year, ts.get(year));
             }
+
         }
     }
 
