@@ -1,5 +1,8 @@
 package ngrams;
 
+import net.sf.saxon.functions.Minimax;
+
+import java.sql.Time;
 import java.util.List;
 import java.util.TreeMap;
 
@@ -31,6 +34,12 @@ public class TimeSeries extends TreeMap<Integer, Double> {
     public TimeSeries(TimeSeries ts, int startYear, int endYear) {
         super();
         // TODO: Fill in this constructor.
+        TimeSeries tsCopy = new TimeSeries();
+        for(Integer year : ts.keySet()){
+            if(year >= MIN_YEAR && year <= MAX_YEAR){
+                tsCopy.put(year, ts.get(year));
+            }
+        }
     }
 
     /**
