@@ -1,8 +1,8 @@
 package ngrams;
 
-import net.sf.saxon.functions.Minimax;
+import edu.princeton.cs.algs4.In;
 
-import java.sql.Time;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeMap;
 
@@ -33,13 +33,11 @@ public class TimeSeries extends TreeMap<Integer, Double> {
      */
     public TimeSeries(TimeSeries ts, int startYear, int endYear) {
         super();
-        // TODO: Fill in this constructor.
-        TimeSeries tsCopy = new TimeSeries();
-        for(Integer year : ts.keySet()){
-            if(year >= MIN_YEAR && year <= MAX_YEAR){
-                tsCopy.put(year, ts.get(year));
-            }
 
+        for(Integer year : ts.keySet()){
+            if(year >= startYear && year <= endYear){
+                this.put(year, ts.get(year));
+            }
         }
     }
 
@@ -47,17 +45,22 @@ public class TimeSeries extends TreeMap<Integer, Double> {
      *  Returns all years for this time series in ascending order.
      */
     public List<Integer> years() {
-        // TODO: Fill in this method.
-        return null;
+        List<Integer> years = new ArrayList<>(this.keySet());
+        return years;
     }
 
     /**
      *  Returns all data for this time series. Must correspond to the
      *  order of years().
+     *
+     *  as we must correspond to the order of the years()
+     *  first we retrieve the list of the keys (years)
+     *  and then add value by value with the ordered keys
      */
     public List<Double> data() {
-        // TODO: Fill in this method.
-        return null;
+        List<Double> data = new ArrayList<>(this.values());
+
+        return data;
     }
 
     /**
@@ -70,8 +73,33 @@ public class TimeSeries extends TreeMap<Integer, Double> {
      * should store the value from the TimeSeries that contains that year.
      */
     public TimeSeries plus(TimeSeries ts) {
-        // TODO: Fill in this method.
-        return null;
+        TimeSeries sum = new TimeSeries();
+        if(this.isEmpty() && ts.isEmpty()){
+            return sum;
+        }
+
+        // copying this TS into the new one
+        for(Integer key : this.keySet()){
+            sum.put(key, this.get(key));
+        }
+
+        // checking for correspondences to be added
+        // if both contain the same key, i add their values
+        // and then change with the corresponding key
+
+        // if one contains the key and other not
+        // then with else, i just put that given key value
+        double newValue;
+        for(Integer key : ts.keySet()){
+            if(sum.containsKey(key)){
+                newValue = ts.get(key) + sum.get(key);
+                sum.put(key, newValue);
+            } else {
+                sum.put(key, ts.get(key));
+            }
+        }
+
+        return sum;
     }
 
     /**
@@ -84,10 +112,17 @@ public class TimeSeries extends TreeMap<Integer, Double> {
      * If TS has a year that is not in this TimeSeries, ignore it.
      */
     public TimeSeries dividedBy(TimeSeries ts) {
-        // TODO: Fill in this method.
-        return null;
-    }
+        TimeSeries divided = new TimeSeries();
+        double div;
 
-    // TODO: Add any private helper methods.
-    // TODO: Remove all TODO comments before submitting.
+        for(Integer key : this.keySet()){
+            if(ts.containsKey(key)){
+                div = this.get(key) / ts.get(key);
+                divided.put(key, div);
+            } else {
+                throw new IllegalArgumentException();
+            }
+        }
+        return divided;
+    }
 }
