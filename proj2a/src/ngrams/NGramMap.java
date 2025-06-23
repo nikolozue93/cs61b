@@ -1,6 +1,9 @@
 package ngrams;
 
+import java.sql.Time;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 import static ngrams.TimeSeries.MAX_YEAR;
 import static ngrams.TimeSeries.MIN_YEAR;
@@ -18,12 +21,20 @@ import static ngrams.TimeSeries.MIN_YEAR;
 public class NGramMap {
 
     // TODO: Add any necessary static/instance variables.
+    private String wordsFilename;
+    private String countsFilename;
+    HashMap wordCounts;
+    HashMap totalCounts;
 
     /**
      * Constructs an NGramMap from WORDSFILENAME and COUNTSFILENAME.
      */
     public NGramMap(String wordsFilename, String countsFilename) {
         // TODO: Fill in this constructor. See the "NGramMap Tips" section of the spec for help.
+        this.wordsFilename = wordsFilename;
+        this.countsFilename = countsFilename;
+        wordCounts = new HashMap<String, TimeSeries>();
+        totalCounts = new HashMap<String, TimeSeries>();
     }
 
     /**
